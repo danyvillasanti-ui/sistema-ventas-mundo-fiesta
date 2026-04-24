@@ -12,7 +12,8 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name("credenciales.json", scope)
+creds_dict = dict(st.secrets["gcp_service_account"])
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
 sheet = client.open("Ventas Callbell").get_worksheet(0)
