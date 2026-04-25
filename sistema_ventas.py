@@ -10,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 st.markdown("""
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="icono-touch-de-apple.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mundo Fiesta">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
