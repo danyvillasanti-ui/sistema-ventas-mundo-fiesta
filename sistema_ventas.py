@@ -6,7 +6,7 @@ from datetime import date
 
 st.set_page_config(
     page_title="Mundo Fiesta On Line",
-    page_icon="Logo Mundo sin fondo_page-0001.png",
+    page_icon="apple-touch-icon.png",
     layout="wide"
 )
 st.markdown("""
