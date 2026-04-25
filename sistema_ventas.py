@@ -13,7 +13,7 @@ with col1:
     st.image("Logo Mundo sin fondo_page-0001.png", width=120)
 
 with col2:
-    st.title("🎉 Sistema de Ventas - Mundo Fiesta")
+    st.title("🎉 Mundo Fiesta - Online")
 
 
 from datetime import date
