@@ -10,20 +10,63 @@ st.set_page_config(
     layout="wide"
 )
 st.markdown("""
-<link rel="apple-touch-icon" href="icono-touch-de-apple.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mundo Fiesta">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b1020">
+""", unsafe_allow_html=True)
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 1.5rem;
+    max-width: 1200px;
+}
+
+[data-testid="stMetric"] {
+    background: linear-gradient(135deg, #111827, #1f2937);
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid #334155;
+}
+
+[data-testid="stForm"] {
+    background: #111827;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #334155;
+}
+
+.stButton button {
+    background: linear-gradient(90deg, #dc2626, #f59e0b);
+    color: white;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+}
+
+.stDownloadButton button {
+    background: #1d4ed8;
+    color: white;
+    border-radius: 12px;
+    border: none;
+}
+</style>
 """, unsafe_allow_html=True)
 #  HEADER PRO
-col1, col2 = st.columns([1, 4])
+col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image("Logo Mundo sin fondo_page-0001.png", width=120)
+    st.image("Logo Mundo sin fondo_page-0001.png", width=100)
 
 with col2:
-    st.title("🎉 Mundo Fiesta - Online")
+    st.markdown("""
+    <h1 style="margin-bottom:0;">Sistema de Ventas Online</h1>
+    <h3 style="margin-top:0; color:#facc15;">Mundo Fiesta · Callbell</h3>
+    <p style="color:#cbd5e1;">Control de ventas online, pagos, envíos y comisiones.</p>
+    """, unsafe_allow_html=True)
 
+st.markdown("---")
 
 from datetime import date
 # 🔗 Conexión a Google Sheets
