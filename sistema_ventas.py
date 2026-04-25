@@ -57,7 +57,7 @@ st.markdown("""
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image("Logo Mundo sin fondo_page-0001.png", width=100)
+    st.image("apple-touch-icon.png", width=100)
 
 with col2:
     st.markdown("""
@@ -87,7 +87,7 @@ def cargar_datos():
 df = cargar_datos()
 
 
-st.title("🎉 Sistema de Ventas - Mundo Fiesta")
+st.title("Sistema de Ventas - Mundo Fiesta🎉")
 
 df = cargar_datos()
 
