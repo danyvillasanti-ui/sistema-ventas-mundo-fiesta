@@ -9,7 +9,12 @@ st.set_page_config(
     page_icon="Logo Mundo sin fondo_page-0001.png",
     layout="wide"
 )
-
+st.markdown("""
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mundo Fiesta">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+""", unsafe_allow_html=True)
 #  HEADER PRO
 col1, col2 = st.columns([1, 4])
 
