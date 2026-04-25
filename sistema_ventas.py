@@ -26,18 +26,14 @@ df = cargar_datos()
 
 st.title("🎉 Sistema de Ventas - Mundo Fiesta")
 
-archivo = "ventas_mf.csv"
+df = cargar_datos()
 
-COLUMNAS = [
-    "Factura", "Importe", "Cliente", "Ciudad", "Fecha",
-    "Envio", "FormaPago", "PagoConfirmado",
-    "Vendedor", "PreparadoPor", "EnviadoPor", "VerificadoPor"
-]
-
-try:
-    df = pd.read_csv(archivo)
-except FileNotFoundError:
-    df = pd.DataFrame(columns=COLUMNAS)
+if df.empty:
+    df = pd.DataFrame(columns=[
+        "Factura", "Importe", "Cliente", "Ciudad", "Fecha",
+        "Envio", "FormaPago", "PagoConfirmado",
+        "Vendedor", "PreparadoPor", "EnviadoPor", "VerificadoPor"
+    ])
 
 if not df.empty:
     df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce").dt.date
@@ -205,7 +201,6 @@ col1, col2 = st.columns(2)
 
 with col1:
     if st.button("💾 Guardar cambios editados"):
-        df_editado.to_csv(archivo, index=False)
         st.success("✅ Cambios guardados")
         st.rerun()
 
