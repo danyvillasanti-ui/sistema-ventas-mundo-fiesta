@@ -55,7 +55,7 @@ with st.form("form_venta"):
         importe = st.number_input("Importe", min_value=0.0, step=1000.0)
 
     with col3:
-        envio = st.selectbox("Medio de envío", ["Retiro en tienda", "Transportadora", "San Pedrana", "Otro"])
+        envio = st.selectbox("Medio de envío", ["Retiro en tienda", "Transportadora", "Moto Bolt", "Otro"])
         forma_pago = st.selectbox("Forma de pago", ["QR", "Tarjeta", "Transferencia", "Efectivo"])
         pago_confirmado = st.selectbox("Pago confirmado", ["SI", "NO"])
 
@@ -66,7 +66,7 @@ with st.form("form_venta"):
         preparado = st.selectbox("Preparado por", ["Coinda", "Diana", "Leticia", "Otro"])
 
     with col5:
-        enviado = st.selectbox("Enviado por", ["Retiro en Tienda", "Transportadora", "San Pedrana", "Otro"])
+        enviado = st.selectbox("Enviado por", ["Retiro en Tienda", "Transportadora", "Moto Bolt", "Otro"])
         verificado = st.text_input("Verificado por", value="Don Hugo")
 
     guardar = st.form_submit_button("Guardar venta")
@@ -118,10 +118,13 @@ with col2:
     fecha_hasta = st.date_input("Hasta", df["Fecha"].max() if not df.empty else date.today())
 
 with col3:
-    vendedor_filtro = st.selectbox(
-        "Vendedor",
-        ["Todos"] + sorted(df["Vendedor"].dropna().unique().tolist()) if not df.empty else ["Todos"]
-    )
+    vendedores = df["Vendedor"].dropna().astype(str).str.strip().unique().tolist()
+vendedores = sorted([v for v in vendedores if v != ""])
+
+vendedor_filtro = st.selectbox(
+    "Vendedor",
+    ["Todos"] + vendedores
+)
 
 with col4:
     pago_filtro = st.selectbox(
