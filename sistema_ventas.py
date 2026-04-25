@@ -123,7 +123,7 @@ vendedores = sorted([v for v in vendedores if v != ""])
 
 vendedor_filtro = st.selectbox(
     "Vendedor",
-    ["Todos"] + vendedores
+    ["Todos", "Coinda", "Diana", "Leticia", "Otro"]
 )
 
 with col4:
