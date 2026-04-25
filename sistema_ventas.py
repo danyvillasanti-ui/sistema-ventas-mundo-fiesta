@@ -57,7 +57,7 @@ st.markdown("""
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image("apple-touch-icon.png", width=100)
+    st.image("apple-touch-icon.png", width=120)
 
 with col2:
     st.markdown("""
