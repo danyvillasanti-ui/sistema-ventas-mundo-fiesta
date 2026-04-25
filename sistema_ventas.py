@@ -2,8 +2,19 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 import pandas as pd
+from datetime import date
 
-st.image("Logo Mundo sin fondo_page-0001.png", width=200)
+st.set_page_config(page_title="Sistema Mundo Fiesta", layout="wide")
+
+#  HEADER PRO
+col1, col2 = st.columns([1, 4])
+
+with col1:
+    st.image("Logo Mundo sin fondo_page-0001.png", width=120)
+
+with col2:
+    st.title("🎉 Sistema de Ventas - Mundo Fiesta")
+
 
 from datetime import date
 # 🔗 Conexión a Google Sheets
