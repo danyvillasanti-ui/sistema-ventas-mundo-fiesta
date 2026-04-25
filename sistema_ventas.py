@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 import pandas as pd
 
-st.image("logo.png", width=200)
+st.image("Logo Mundo sin fondo_page-0001.png", width=200)
 
 from datetime import date
 # 🔗 Conexión a Google Sheets
