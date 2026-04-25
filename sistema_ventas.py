@@ -4,7 +4,11 @@ import streamlit as st
 import pandas as pd
 from datetime import date
 
-st.set_page_config(page_title="Sistema Mundo Fiesta", layout="wide")
+st.set_page_config(
+    page_title="Mundo Fiesta On Line",
+    page_icon="Logo Mundo sin fondo_page-0001.png",
+    layout="wide"
+)
 
 #  HEADER PRO
 col1, col2 = st.columns([1, 4])
