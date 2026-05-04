@@ -119,7 +119,7 @@ with st.form("form_venta"):
 
     with col3:
         envio = st.selectbox("Medio de envío", ["Retiro en tienda", "Transportadora", "Moto Bolt", "Otro"])
-        forma_pago = st.selectbox("Forma de pago", ["QR", "Tarjeta", "Transferencia", "Efectivo"])
+        forma_pago = st.selectbox("Forma de pago", ["QR", "Tarjeta", "Transferencia", "Efectivo", "Credito", "Cheque", "Compensacion"])
         pago_confirmado = st.selectbox("Pago confirmado", ["SI", "NO"])
 
     col4, col5 = st.columns(2)
