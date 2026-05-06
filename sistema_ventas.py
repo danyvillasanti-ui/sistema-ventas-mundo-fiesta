@@ -105,6 +105,16 @@ if not df.empty:
 # ---------------- NUEVA VENTA ----------------
 st.subheader("➕ Nueva Venta")
 
+def formatear_miles(valor):
+    try:
+        valor = int(valor)
+        return f"{valor:,}".replace(",", ".")
+    except:
+        return ""
+
+def limpiar_numero(texto):
+    return int(texto.replace(".", "")) if texto else 0
+
 with st.form("form_venta"):
     col1, col2, col3 = st.columns(3)
 
@@ -113,33 +123,22 @@ with st.form("form_venta"):
         cliente = st.text_input("Cliente")
         ciudad = st.text_input("Ciudad")
 
-with col2:
-    fecha = st.date_input("Fecha", date.today())
+    with col2:
+        fecha = st.date_input("Fecha", date.today())
 
-    # -------- IMPORTE FINANCIERO --------
-    def formatear_miles(valor):
-        try:
-            valor = int(valor)
-            return f"{valor:,}".replace(",", ".")
-        except:
-            return ""
+        if "importe_str" not in st.session_state:
+            st.session_state.importe_str = ""
 
-    def limpiar_numero(texto):
-        return int(texto.replace(".", "")) if texto else 0
+        importe_input = st.text_input("Importe", value=st.session_state.importe_str)
 
-    if "importe_str" not in st.session_state:
-        st.session_state.importe_str = ""
+        importe_limpio = "".join(filter(str.isdigit, importe_input))
+        importe_formateado = formatear_miles(importe_limpio)
 
-    importe_input = st.text_input("Importe", value=st.session_state.importe_str)
+        if importe_formateado != st.session_state.importe_str:
+            st.session_state.importe_str = importe_formateado
+            st.rerun()
 
-    importe_limpio = "".join(filter(str.isdigit, importe_input))
-    importe_formateado = formatear_miles(importe_limpio)
-
-    if importe_formateado != st.session_state.importe_str:
-        st.session_state.importe_str = importe_formateado
-        st.rerun()
-
-    importe = limpiar_numero(st.session_state.importe_str)
+        importe = limpiar_numero(st.session_state.importe_str)
 
     with col3:
         envio = st.selectbox("Medio de envío", ["Retiro en tienda", "Transportadora", "Moto Bolt", "Otro"])
@@ -156,7 +155,7 @@ with col2:
         enviado = st.selectbox("Enviado por", ["Retiro en Tienda", "Transportadora", "Moto Bolt", "Otro"])
         verificado = st.text_input("Verificado por", value="Don Hugo")
 
-    guardar = st.form_submit_button("Guardar venta")
+    guardar = st.form_submit_button("💾 Guardar venta")
 
     if guardar:
         nueva = {
@@ -175,24 +174,25 @@ with col2:
         }
 
         df = pd.concat([df, pd.DataFrame([nueva])], ignore_index=True)
+
         sheet.append_row([
-    factura,
-    importe,
-    cliente,
-    ciudad,
-    str(fecha),
-    envio,
-    forma_pago,
-    pago_confirmado,
-    vendedor,
-    preparado,
-    enviado,
-    verificado
-])
+            factura,
+            importe,
+            cliente,
+            ciudad,
+            str(fecha),
+            envio,
+            forma_pago,
+            pago_confirmado,
+            vendedor,
+            preparado,
+            enviado,
+            verificado
+        ])
+
         df = cargar_datos()
         st.success("✅ Venta registrada")
         st.rerun()
-
 # ---------------- FILTROS ----------------
 st.subheader("🔍 Filtros")
 
