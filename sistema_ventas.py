@@ -113,9 +113,33 @@ with st.form("form_venta"):
         cliente = st.text_input("Cliente")
         ciudad = st.text_input("Ciudad")
 
-    with col2:
-        fecha = st.date_input("Fecha", date.today())
-        importe = st.number_input("Importe", min_value=0.0, step=1000.0)
+with col2:
+    fecha = st.date_input("Fecha", date.today())
+
+    # -------- IMPORTE FINANCIERO --------
+    def formatear_miles(valor):
+        try:
+            valor = int(valor)
+            return f"{valor:,}".replace(",", ".")
+        except:
+            return ""
+
+    def limpiar_numero(texto):
+        return int(texto.replace(".", "")) if texto else 0
+
+    if "importe_str" not in st.session_state:
+        st.session_state.importe_str = ""
+
+    importe_input = st.text_input("Importe", value=st.session_state.importe_str)
+
+    importe_limpio = "".join(filter(str.isdigit, importe_input))
+    importe_formateado = formatear_miles(importe_limpio)
+
+    if importe_formateado != st.session_state.importe_str:
+        st.session_state.importe_str = importe_formateado
+        st.rerun()
+
+    importe = limpiar_numero(st.session_state.importe_str)
 
     with col3:
         envio = st.selectbox("Medio de envío", ["Retiro en tienda", "Transportadora", "Moto Bolt", "Otro"])
@@ -209,50 +233,46 @@ if vendedor_filtro != "Todos":
 if pago_filtro != "Todos":
     df_filtrado = df_filtrado[df_filtrado["PagoConfirmado"] == pago_filtro]
 
-# ---------------- DASHBOARD ----------------
-st.subheader("📈 Dashboard")
+# ---------------- DASHBOARD EN VIVO ----------------
+st.markdown("## 📊 Dashboard en vivo")
 
-total = df_filtrado["Importe"].sum() if not df_filtrado.empty else 0
-cantidad = len(df_filtrado)
-ticket_promedio = total / cantidad if cantidad > 0 else 0
-pendientes = len(df_filtrado[df_filtrado["PagoConfirmado"] == "NO"]) if not df_filtrado.empty else 0
+total_vendido = df_filtrado["Importe"].sum() if not df_filtrado.empty else 0
+cantidad_ventas = len(df_filtrado)
+ticket_promedio = total_vendido / cantidad_ventas if cantidad_ventas > 0 else 0
+pagos_pendientes = len(df_filtrado[df_filtrado["PagoConfirmado"] == "NO"]) if not df_filtrado.empty else 0
+comision_total = total_vendido * 0.0075
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 
-col1.metric("💰 Total vendido", f"Gs. {total:,.0f}")
-col2.metric("🧾 Cantidad ventas", cantidad)
-col3.metric("🎯 Ticket promedio", f"Gs. {ticket_promedio:,.0f}")
-col4.metric("⚠️ Pagos pendientes", pendientes)
-
-if not df_filtrado.empty:
-    st.subheader("Ventas por vendedor")
-    ventas_vendedor = df_filtrado.groupby("Vendedor")["Importe"].sum().reset_index()
-    st.bar_chart(ventas_vendedor, x="Vendedor", y="Importe")
-# ---------------- CIERRE DE COMISIONES ----------------
-st.subheader("💰 Cierre de comisiones")
-
-porcentaje_comision = 0.0075
+col1.metric("💰 Total vendido", f"Gs. {total_vendido:,.0f}".replace(",", "."))
+col2.metric("🧾 Ventas", cantidad_ventas)
+col3.metric("🎯 Ticket promedio", f"Gs. {ticket_promedio:,.0f}".replace(",", "."))
+col4.metric("⚠️ Pendientes", pagos_pendientes)
+col5.metric("💵 Comisión total", f"Gs. {comision_total:,.0f}".replace(",", "."))
 
 if not df_filtrado.empty:
-    cierre = df_filtrado.groupby("Vendedor")["Importe"].sum().reset_index()
-    cierre["Comisión 0.75%"] = cierre["Importe"] * porcentaje_comision
+    st.markdown("### 🏆 Ranking por vendedor")
 
-    st.dataframe(cierre, use_container_width=True)
-
-    total_comisiones = cierre["Comisión 0.75%"].sum()
-
-    st.metric("Total a pagar en comisiones", f"Gs. {total_comisiones:,.0f}")
-
-    csv_comisiones = cierre.to_csv(index=False).encode("utf-8")
-
-    st.download_button(
-        "⬇️ Descargar cierre de comisiones",
-        data=csv_comisiones,
-        file_name="cierre_comisiones.csv",
-        mime="text/csv"
+    ranking = (
+        df_filtrado
+        .groupby("Vendedor")["Importe"]
+        .sum()
+        .reset_index()
+        .sort_values(by="Importe", ascending=False)
     )
+
+    ranking["Comisión 0.75%"] = ranking["Importe"] * 0.0075
+
+    ranking["Importe"] = ranking["Importe"].apply(lambda x: f"Gs. {x:,.0f}".replace(",", "."))
+    ranking["Comisión 0.75%"] = ranking["Comisión 0.75%"].apply(lambda x: f"Gs. {x:,.0f}".replace(",", "."))
+
+    st.dataframe(ranking, use_container_width=True)
+
+    st.markdown("### 📈 Ventas por vendedor")
+    grafico_vendedor = df_filtrado.groupby("Vendedor")["Importe"].sum().reset_index()
+    st.bar_chart(grafico_vendedor, x="Vendedor", y="Importe")
 else:
-    st.info("No hay ventas para calcular comisiones.")
+    st.info("Todavía no hay datos para mostrar en el dashboard.")
 
 # ---------------- TABLA EDITABLE ----------------
 st.subheader("📊 Ventas cargadas")
